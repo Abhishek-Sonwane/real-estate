@@ -12,9 +12,6 @@ function Header() {
   const path = usePathname();
   const { user, isSignedIn } = useUser();
 
-  useEffect(() => {
-    console.log(path);
-  }, []);
   return (
     <div className="p-6 px-10 bg-white flex justify-between shadow-sm fixed top-0 w-full z-10">
       <div className="flex gap-12 items-center">

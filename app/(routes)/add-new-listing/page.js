@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/utils/supabase/client";
 import { useUser } from "@clerk/nextjs";
 import { Loader } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
@@ -15,6 +16,7 @@ const AddNewListing = () => {
   const [coordinates, setCoordinates] = useState();
   const { user } = useUser();
   const [loader, setLoader] = useState(false);
+  const router = useRouter();
 
   const nextHandler = async () => {
     setLoader(true);
@@ -32,6 +34,7 @@ const AddNewListing = () => {
       setLoader(false);
       console.log(`New Data Added : `, data);
       toast("New Address Added For Listing");
+      router.replace("/edit-listing/" + data[0]?.id);
     }
     if (error) {
       setLoader(false);
