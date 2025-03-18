@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Provider from "./Provider";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,9 +22,17 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body className={``}>
-          <Provider>{children}</Provider>
+      <html lang="en" suppressHydrationWarning={true}>
+        <head>
+          <script
+            src={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_PLACE_MAP_API_KEY}&loading=async&libraries=places`}
+          ></script>
+        </head>
+        <body className={``} suppressHydrationWarning={true}>
+          <Provider>
+            <Toaster />
+            {children}
+          </Provider>
         </body>
       </html>
     </ClerkProvider>
