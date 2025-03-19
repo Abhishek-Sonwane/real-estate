@@ -8,7 +8,7 @@ const MarkerItem = ({ item }) => {
   return (
     <div>
       <MarkerF
-        position={item.coordinates}
+        position={item?.coordinates}
         onClick={() => {
           setSelectedListing(item);
         }}

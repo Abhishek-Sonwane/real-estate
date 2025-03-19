@@ -18,7 +18,7 @@ const AddNewListing = () => {
   const [loader, setLoader] = useState(false);
   const router = useRouter();
 
-  console.log(selectedAddress);
+  // console.log(selectedAddress);
 
   const nextHandler = async () => {
     setLoader(true);

@@ -125,6 +125,7 @@ const EditListing = () => {
     if (data) {
       setIsLoading(false);
       toast("Listing Published!");
+      router.replace("/");
     }
     if (error) {
       setIsLoading(false);
