@@ -18,13 +18,15 @@ const AddNewListing = () => {
   const [loader, setLoader] = useState(false);
   const router = useRouter();
 
+  console.log(selectedAddress);
+
   const nextHandler = async () => {
     setLoader(true);
     const { data, error } = await supabase
       .from("listing")
       .insert([
         {
-          address: selectedAddress,
+          address: selectedAddress.label,
           coordinates: coordinates,
           createdBy: user?.primaryEmailAddress.emailAddress,
         },
@@ -48,7 +50,7 @@ const AddNewListing = () => {
       <div className="p-10 flex flex-col gap-5 items-center justify-center">
         <h2 className="font-bold text-2xl">Add New Listing</h2>
 
-        <div className="p-10 px-28 rounded-lg border w-full shadow-md flex flex-col gap-5">
+        <div className="p-10 px-16 md:px-20 rounded-lg border w-full md:min-w-[500px] shadow-md flex flex-col gap-5">
           <h2 className="text-gray-500">
             Enter Address which you want to list
           </h2>

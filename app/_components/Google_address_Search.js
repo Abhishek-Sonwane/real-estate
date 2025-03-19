@@ -50,14 +50,14 @@ const api_key = process.env.GOOGLE_PLACE_MAP_API_KEY;
 
 const Google_address_Search = ({ selectedAddress, setCoordinates }) => {
   return (
-    <div className="flex items-center w-full">
+    <div className="flex items-center w-full ">
       <MapPin className="h-10 w-10 p-2 rounded-l-lg text-primary bg-purple-200" />
       <GooglePlacesAutocomplete
         apiKey={api_key}
         selectProps={{
           placeholder: "Search Property Address",
           isClearable: true,
-          className: "w-full ",
+          className: "w-full",
           onChange: (place) => {
             selectedAddress(place);
             geocodeByAddress(place.label)

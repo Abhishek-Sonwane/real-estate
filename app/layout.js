@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
             src={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_PLACE_MAP_API_KEY}&loading=async&libraries=places`}
           ></script>
         </head>
-        <body className={``} suppressHydrationWarning={true}>
+        <body className={``} >
           <Provider>
             <Toaster />
             {children}

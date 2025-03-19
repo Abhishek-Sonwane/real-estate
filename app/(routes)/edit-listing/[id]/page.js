@@ -71,8 +71,11 @@ const EditListing = () => {
       .select();
 
     if (data) {
-      console.log(data);
-      toast("Listing Updated and Published");
+      toast("Listing Saved and Updated");
+      setIsLoading(false);
+    }
+
+    if (error) {
       setIsLoading(false);
     }
 
@@ -92,6 +95,7 @@ const EditListing = () => {
         toast("Error While Uploading Images");
         setIsLoading(false);
       } else {
+        setIsLoading(true);
         const imageUrl = process.env.NEXT_PUBLIC_IMAGE_URL + fileName;
         const { data, error } = await supabase
           .from("listingImages")
@@ -293,7 +297,7 @@ const EditListing = () => {
                     </h2>
                     <FileUpload
                       setImages={(value) => setImages(value)}
-                      imageList={listing.listingImages}
+                      imageList={listing?.listingImages}
                     />
                   </div>
                 </div>
@@ -308,9 +312,9 @@ const EditListing = () => {
                   </Button>
 
                   <AlertDialog>
-                    <AlertDialogTrigger aschlild='true'>
+                    <AlertDialogTrigger asChlild>
                       {" "}
-                      <Button disabled={loading} className={``}>
+                      <Button disabled={loading} type="button" className={``}>
                         {loading ? (
                           <Loader className="animate-spin" />
                         ) : (
