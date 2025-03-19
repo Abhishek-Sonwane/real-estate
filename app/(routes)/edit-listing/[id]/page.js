@@ -17,12 +17,27 @@ import { useParams, usePathname, useRouter } from "next/navigation";
 import { supabase } from "@/utils/supabase/client";
 import { toast } from "sonner";
 import { useUser } from "@clerk/nextjs";
+import FileUpload from "../_components/FileUpload";
+import { Loader } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const EditListing = () => {
   const params = usePathname();
   const { user } = useUser();
   const router = useRouter();
   const [listing, setListing] = useState([]);
+  const [images, setImages] = useState([]);
+  const [loading, setIsLoading] = useState(false);
 
   useEffect(() => {
     // console.log(params.split("/")[2]);
@@ -32,11 +47,13 @@ const EditListing = () => {
   const verifyUserRecord = async () => {
     const { data, error } = await supabase
       .from("listing")
-      .select("*")
+      .select("*, listingImages(listing_id,url)")
       .eq("createdBy", user?.primaryEmailAddress.emailAddress)
       .eq("id", params.split("/")[2]);
 
     if (data) {
+      console.log(data);
+
       setListing(data[0]);
     }
 
@@ -46,6 +63,7 @@ const EditListing = () => {
   };
 
   const submitHandler = async (formValue) => {
+    setIsLoading(true);
     const { data, error } = await supabase
       .from("listing")
       .update(formValue)
@@ -55,12 +73,59 @@ const EditListing = () => {
     if (data) {
       console.log(data);
       toast("Listing Updated and Published");
+      setIsLoading(false);
+    }
+
+    for (const image of images) {
+      setIsLoading(true);
+      const file = image;
+      const fileName = Date.now().toString();
+      const fileExt = fileName.split(".").pop();
+      const { data, error } = await supabase.storage
+        .from("listingimages")
+        .upload(`${fileName}`, file, {
+          contentType: `image/${fileExt}`,
+          upsert: false,
+        });
+
+      if (error) {
+        toast("Error While Uploading Images");
+        setIsLoading(false);
+      } else {
+        const imageUrl = process.env.NEXT_PUBLIC_IMAGE_URL + fileName;
+        const { data, error } = await supabase
+          .from("listingImages")
+          .insert([{ url: imageUrl, listing_id: params?.split("/")[2] }])
+          .select();
+
+        if (data) {
+          setIsLoading(false);
+        }
+
+        if (error) {
+          setIsLoading(false);
+        }
+      }
+      setIsLoading(false);
     }
   };
 
-  if (listing) {
-    console.log(listing);
-  }
+  const publishBtnHandler = async () => {
+    setIsLoading(true);
+    const { data, error } = await supabase
+      .from("listing")
+      .update({ active: true })
+      .eq("id", params?.split("/")[2])
+      .select();
+
+    if (data) {
+      setIsLoading(false);
+      toast("Listing Published!");
+    }
+    if (error) {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="px-10 md:px-36 my-10">
@@ -222,14 +287,56 @@ const EditListing = () => {
                       onChange={handleChange}
                     />
                   </div>
+                  <div>
+                    <h2 className="font-lg text-gray-500 my-4">
+                      Upload Property Images
+                    </h2>
+                    <FileUpload
+                      setImages={(value) => setImages(value)}
+                      imageList={listing.listingImages}
+                    />
+                  </div>
                 </div>
                 <div className="flex gap-7 justify-end">
                   <Button
-                    className={`bg-white border-2 border-primary text-primary hover:text-white`}
+                    type="submit"
+                    variant={"outline"}
+                    disabled={loading}
+                    className={`text-primary border-primary`}
                   >
-                    Save
+                    {loading ? <Loader className="animate-spin" /> : `Save`}
                   </Button>
-                  <Button type="submit">Save & Publish</Button>
+
+                  <AlertDialog>
+                    <AlertDialogTrigger aschlild='true'>
+                      {" "}
+                      <Button disabled={loading} className={``}>
+                        {loading ? (
+                          <Loader className="animate-spin" />
+                        ) : (
+                          `Save & Publish`
+                        )}
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Ready to Pulish?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Do You Really Want To Publish The Listing?
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={() => publishBtnHandler()}>
+                          {loading ? (
+                            <Loader className="animate-spin" />
+                          ) : (
+                            "Continue"
+                          )}
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </div>
             </div>

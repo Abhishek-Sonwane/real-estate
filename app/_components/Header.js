@@ -23,7 +23,7 @@ function Header() {
                 path == "/" && "text-primary"
               }`}
             >
-              For Sale
+              For Sell
             </li>
           </Link>
           <li className="hover:text-primary font-medium text-base cursor-pointer">
