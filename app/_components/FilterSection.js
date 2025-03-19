@@ -15,9 +15,9 @@ const FilterSection = ({
   setHomeType,
 }) => {
   return (
-    <div className="px-3 py-2 grid grid-cols-2 md:flex gap-2">
+    <div className="px-3 py-2 flex flex-col xs:grid xs:grid-cols-2 md:grid-cols-2 lg:flex lg:flex-row gap-2">
       <Select onValueChange={setBedCount}>
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="w-full xs:w-[180px]">
           <SelectValue placeholder="Bed" />
         </SelectTrigger>
         <SelectContent>
@@ -50,7 +50,7 @@ const FilterSection = ({
       </Select>
 
       <Select onValueChange={setBathCount}>
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="w-full xs:w-[180px]">
           <SelectValue placeholder="Bath" />
         </SelectTrigger>
         <SelectContent>
@@ -83,7 +83,7 @@ const FilterSection = ({
       </Select>
 
       <Select onValueChange={setParkingCount}>
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="w-full xs:w-[180px]">
           <SelectValue placeholder="Parking" />
         </SelectTrigger>
 
@@ -111,7 +111,7 @@ const FilterSection = ({
           value == "All" ? setHomeType(null) : setHomeType(value)
         }
       >
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="w-full xs:w-[180px]">
           <SelectValue placeholder="Home Type" />
         </SelectTrigger>
         <SelectContent>
