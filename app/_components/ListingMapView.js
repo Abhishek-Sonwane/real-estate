@@ -7,6 +7,10 @@ import { toast } from "sonner";
 const ListingMapView = ({ type }) => {
   const [listing, setListing] = useState([]);
   const [searchedAddress, setSearchAddresss] = useState();
+  const [bedCount, setBedCount] = useState(0);
+  const [bathCount, setBathCount] = useState(0);
+  const [parkingCount, setParkingCount] = useState(0);
+  const [homeType, setHomeType] = useState();
 
   useEffect(() => {
     getLatestListing();
@@ -36,7 +40,7 @@ const ListingMapView = ({ type }) => {
     console.log(searchedAddress);
     const searchTerm = searchedAddress?.value?.structured_formatting?.main_text;
 
-    const { data, error } = await supabase
+    let query = supabase
       .from("listing")
       .select(
         `*, listingImages(
@@ -45,9 +49,17 @@ const ListingMapView = ({ type }) => {
       )
       .eq("active", true)
       .eq("type", type)
+      .gte("bedroom", bedCount)
+      .gte("bathroom", bathCount)
+      .gte("parking", parkingCount)
       .like("address", "%" + searchTerm + "%")
       .order("id", { ascending: false });
 
+    if (homeType) {
+      query = query.eq("propertyType", homeType);
+    }
+
+    const { data, error } = await query;
     if (data) {
       setListing(data);
       console.log(data);
@@ -61,6 +73,10 @@ const ListingMapView = ({ type }) => {
           listing={listing}
           handleSearchClick={handleSearchClick}
           searchedAddress={(v) => setSearchAddresss(v)}
+          setBathCount={setBathCount}
+          setBedCount={setBedCount}
+          setParkingCount={setParkingCount}
+          setHomeType={setHomeType}
         />
       </div>
       <div>Map</div>

@@ -3,13 +3,22 @@ import Image from "next/image";
 import React, { useState } from "react";
 import Google_address_Search from "./Google_address_Search";
 import { Button } from "@/components/ui/button";
+import FilterSection from "./FilterSection";
 
-const Listing = ({ listing, handleSearchClick, searchedAddress }) => {
+const Listing = ({
+  listing,
+  handleSearchClick,
+  searchedAddress,
+  setBathCount,
+  setBedCount,
+  setParkingCount,
+  setHomeType,
+}) => {
   // console.log(listing);
   const [address, setAddress] = useState();
 
   return (
-    <div>
+    <div className="">
       <div className="p-3 flex gap-6">
         <Google_address_Search
           selectedAddress={(v) => {
@@ -23,6 +32,12 @@ const Listing = ({ listing, handleSearchClick, searchedAddress }) => {
           Search
         </Button>
       </div>
+      <FilterSection
+        setBathCount={setBathCount}
+        setBedCount={setBedCount}
+        setParkingCount={setParkingCount}
+        setHomeType={setHomeType}
+      />
       <div>
         {address && (
           <div className="px-3 my-5">
