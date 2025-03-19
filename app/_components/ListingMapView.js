@@ -39,7 +39,6 @@ const ListingMapView = ({ type }) => {
   };
 
   const handleSearchClick = async () => {
-    console.log(searchedAddress);
     const searchTerm = searchedAddress?.value?.structured_formatting?.main_text;
 
     let query = supabase
@@ -64,7 +63,6 @@ const ListingMapView = ({ type }) => {
     const { data, error } = await query;
     if (data) {
       setListing(data);
-      console.log(data);
     }
   };
 
@@ -83,7 +81,7 @@ const ListingMapView = ({ type }) => {
         />
       </div>
       <div className="fixed right-10 top-30 h-full hidden md:block md:w-[350px] lg:w-[450px] xl:w-[630px]">
-        <GoogleMapSection coordinates={coordinates} />
+        <GoogleMapSection coordinates={coordinates} listing={listing}  />
       </div>
     </div>
   );

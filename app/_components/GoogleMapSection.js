@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
+import MarkerItem from "./MarkerItem";
 
 const containerStyle = {
   width: "100%",
@@ -8,10 +9,10 @@ const containerStyle = {
   border: "1px solid black",
 };
 
-const GoogleMapSection = ({ coordinates }) => {
+const GoogleMapSection = ({ coordinates, listing }) => {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "YOUR_API_KEY",
+    googleMapsApiKey: process.env.GOOGLE_PLACE_MAP_API_KEY,
   });
   const [center, setCenter] = useState({
     lat: 18.5550838,
@@ -46,7 +47,9 @@ const GoogleMapSection = ({ coordinates }) => {
           onUnmount={onUnmount}
         >
           {/* Child components, such as markers, info windows, etc. */}
-          <></>
+          {listing.map((item, index) => (
+            <MarkerItem key={index} item={item} />
+          ))}
         </GoogleMap>
       ) : (
         <></>

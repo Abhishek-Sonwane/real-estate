@@ -60,7 +60,7 @@ const Google_address_Search = ({ selectedAddress, setCoordinates }) => {
           className: "w-full",
           onChange: (place) => {
             selectedAddress(place);
-            geocodeByAddress(place.label)
+            geocodeByAddress(place?.label)
               .then((result) => getLatLng(result[0]))
               .then(({ lat, lng }) => {
                 setCoordinates({ lat, lng });
