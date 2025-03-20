@@ -5,6 +5,18 @@ import { Bath, BedDouble, MapPin, Ruler, Trash } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 
 const UserListing = () => {
   const { user } = useUser();
@@ -17,14 +29,39 @@ const UserListing = () => {
       .eq(`createdBy`, user?.primaryEmailAddress?.emailAddress);
 
     if (data) {
-      console.log(data);
+      //   console.log(data);
       setListing(data);
     }
   };
 
-  const DeleteUserListing = async () => {
-    
-  }
+  const DeleteUserListing = async (selected_id) => {
+    console.log(`Listing Deleted ${selected_id}`);
+
+    const { error } = await supabase
+      .from("listingImages")
+      .delete()
+      .eq("listing_id", selected_id);
+
+    if (error) {
+      console.log(error);
+
+      toast("Error Occured During Deleting Images");
+    }
+
+    const response = await supabase
+      .from("listing")
+      .delete()
+      .eq("id", selected_id);
+
+    if (response?.error == null) {
+      toast("Property Deleted Sucessfully");
+    }
+
+    if (response?.error != null) {
+      console.log(response);
+      toast("Error Occured While Deleting Property");
+    }
+  };
 
   useEffect(() => {
     user && GetUserListing();
@@ -54,7 +91,12 @@ const UserListing = () => {
                 className="rounded-lg object-cover h-[170px] "
               />
               <div className="flex mt-2 flex-col gap-2 justify-center">
-                <h2 className="font-bold text-xl">${item?.price}</h2>
+                <div className="flex items-center justify-between">
+                  <h2 className="font-bold text-xl">${item?.price}</h2>
+                  <h2 className=" text-sm text-primary px-2 py-0.5 rounded-lg border border-primary">
+                    {item?.propertyType}
+                  </h2>
+                </div>
                 <h2 className="flex gap-2 text-sm text-gray-400">
                   <MapPin className="h-4 w-4" />
                   {item?.address}
@@ -96,13 +138,40 @@ const UserListing = () => {
                     </Button>
                   </Link>
 
-                  <Button
-                    size={"sm"}
-                    variant={"destructive"}
-                    className={`cursor-pointer`}
-                  >
-                    <Trash />
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger>
+                      <Button
+                        size={"sm"}
+                        variant={"destructive"}
+                        className={`cursor-pointer`}
+                      >
+                        <Trash />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete your Property and remove your data from our
+                          servers.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel className={"cursor-pointer"}>
+                          Cancel
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => DeleteUserListing(item?.id)}
+                          className={"cursor-pointer"}
+                        >
+                          Continue
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </div>
             </div>
