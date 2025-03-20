@@ -13,11 +13,6 @@ const ListingMapView = ({ type }) => {
   const [parkingCount, setParkingCount] = useState(0);
   const [homeType, setHomeType] = useState();
   const [coordinates, setCoordinates] = useState();
-
-  useEffect(() => {
-    getLatestListing();
-  }, []);
-
   const getLatestListing = async () => {
     const { data, error } = await supabase
       .from("listing")
@@ -37,6 +32,9 @@ const ListingMapView = ({ type }) => {
       toast("Server Side Error");
     }
   };
+  useEffect(() => {
+    getLatestListing();
+  }, []);
 
   const handleSearchClick = async () => {
     const searchTerm = searchedAddress?.value?.structured_formatting?.main_text;
@@ -81,7 +79,7 @@ const ListingMapView = ({ type }) => {
         />
       </div>
       <div className="fixed right-10 top-30 h-full hidden md:block md:w-[350px] lg:w-[450px] xl:w-[630px]">
-        <GoogleMapSection coordinates={coordinates} listing={listing}  />
+        <GoogleMapSection coordinates={coordinates} listing={listing} />
       </div>
     </div>
   );

@@ -14,8 +14,6 @@ import React from "react";
 import AgentDetails from "./AgentDetails";
 
 const Details = ({ item }) => {
-  console.log(item);
-
   return (
     <div className="mt-3">
       <div className="flex justify-between border-b border-gray-400/50 py-3 my-3">

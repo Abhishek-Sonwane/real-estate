@@ -1,11 +1,7 @@
 "use client";
-import {
-  GoogleMap,
-  useJsApiLoader,
-  StandaloneSearchBox,
-} from "@react-google-maps/api";
+
 import { MapPin } from "lucide-react";
-import React, { useState, useRef } from "react";
+import React from "react";
 import GooglePlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,

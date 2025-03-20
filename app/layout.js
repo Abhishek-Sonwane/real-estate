@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
         <head>
           <Script
             type="text/javascript"
-            src={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_PLACE_MAP_API_KEY}&loading=async&libraries=places&sensor=true`}
+            src={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_PLACE_MAP_API_KEY}&libraries=places`}
             strategy="beforeInteractive"
           ></Script>
         </head>
