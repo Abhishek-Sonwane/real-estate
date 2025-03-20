@@ -24,13 +24,13 @@ const GoogleMapSection = ({ coordinates, listing }) => {
     coordinates && setCenter(coordinates);
   }, [coordinates]);
 
-  // const onLoad = React.useCallback(function callback(map) {
-  //   // This is just an example of getting and using the map instance!!! don't just blindly copy!
-  //   const bounds = new window.google.maps.LatLngBounds(center);
-  //   map.fitBounds(bounds);
+  const onLoad = React.useCallback(function callback(map) {
+    // This is just an example of getting and using the map instance!!! don't just blindly copy!
+    const bounds = new window.google.maps.LatLngBounds(center);
+    map.fitBounds(bounds);
 
-  //   setMap(map);
-  // }, []);
+    setMap(map);
+  }, []);
 
   const onUnmount = React.useCallback(function callback(map) {
     setMap(null);
@@ -43,7 +43,7 @@ const GoogleMapSection = ({ coordinates, listing }) => {
           mapContainerStyle={containerStyle}
           center={center}
           zoom={18}
-          // onLoad={onLoad}
+          onLoad={onLoad}
           onUnmount={onUnmount}
           gestureHandling={"greedy"}
         >
