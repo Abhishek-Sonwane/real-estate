@@ -23,10 +23,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
-      <html lang="en" suppressHydrationWarning='true'>
+      <html lang="en" suppressHydrationWarning="true">
         <head>
           <Script
-            src={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_PLACE_MAP_API_KEY}&loading=async&libraries=places`}
+            type="text/javascript"
+            src={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_PLACE_MAP_API_KEY}&loading=async&libraries=places&sensor=true`}
             strategy="beforeInteractive"
           ></Script>
         </head>
