@@ -1,12 +1,20 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { UserButton, useUser } from "@clerk/nextjs";
+import { SignOutButton, UserButton, useUser } from "@clerk/nextjs";
 import { Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 function Header() {
   const path = usePathname();
@@ -26,9 +34,16 @@ function Header() {
               For Sell
             </li>
           </Link>
-          <li className="hover:text-primary font-medium text-base cursor-pointer">
-            For Rent
-          </li>
+          <Link href={`/rent`}>
+            {" "}
+            <li
+              className={`hover:text-primary font-medium text-base cursor-pointer ${
+                path == "/rent" && "text-primary"
+              }`}
+            >
+              For Rent
+            </li>
+          </Link>
           <li className="hover:text-primary font-medium text-base cursor-pointer">
             Agent Finder
           </li>
@@ -41,7 +56,28 @@ function Header() {
           </Button>
         </Link>
         {isSignedIn ? (
-          <UserButton />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Image
+                src={user?.imageUrl}
+                width={32}
+                height={32}
+                alt=""
+                className="rounded-full"
+              />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <Link href={`/user`}>Profile</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>My Listing</DropdownMenuItem>
+              <DropdownMenuItem>
+                <SignOutButton>Logout</SignOutButton>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         ) : (
           <Link href={`/sign-in`}>
             <Button variant={`outline`}>Login</Button>

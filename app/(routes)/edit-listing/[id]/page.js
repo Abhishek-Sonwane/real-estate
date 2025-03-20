@@ -64,6 +64,7 @@ const EditListing = () => {
 
   const submitHandler = async (formValue) => {
     setIsLoading(true);
+    formValue.active = false;
     const { data, error } = await supabase
       .from("listing")
       .update(formValue)
@@ -313,8 +314,7 @@ const EditListing = () => {
                   </Button>
 
                   <AlertDialog>
-                    <AlertDialogTrigger asChlild>
-                      {" "}
+                    <AlertDialogTrigger asChild>
                       <Button disabled={loading} type="button" className={``}>
                         {loading ? (
                           <Loader className="animate-spin" />
